@@ -22,7 +22,7 @@ Write an SQL query to report the name, population, and area of the big countries
 Return the result table in any order.
 
 
-# Solution
+# Solution 1
 select
 name, population, area
 from world
@@ -48,7 +48,7 @@ Return the result table in any order.
 Each row of this table indicates the name of a student and the class in which they are enrolled.
 
 
-# Solution
+# Solution 2
 select class
 from courses
 group by class
@@ -56,3 +56,48 @@ having count(class)>=5
 
 
 ----------------------------------------------------------------------------------------------------------------------------
+
+# Question 2 - Friend Requests I: Overall Acceptance Rate
+
+Table: FriendRequest
++----------------+---------+
+| Column Name    | Type    |
++----------------+---------+
+| sender_id      | int     |
+| send_to_id     | int     |
+| request_date   | date    |
++----------------+---------+
+There is no primary key for this table, it may contain duplicates.
+This table contains the ID of the user who sent the request, the ID of the user who received the request, and the date of the request.
+
+Table: RequestAccepted
++----------------+---------+
+| Column Name    | Type    |
++----------------+---------+
+| requester_id   | int     |
+| accepter_id    | int     |
+| accept_date    | date    |
++----------------+---------+
+There is no primary key for this table, it may contain duplicates.
+This table contains the ID of the user who sent the request, the ID of the user who received the request, and the date when the request was accepted.
+ 
+
+Write an SQL query to find the overall acceptance rate of requests, which is the number of acceptance divided by the number of requests. Return the answer rounded to 2 decimals places.
+
+Note that:
+
+The accepted requests are not necessarily from the table friend_request. In this case, Count the total accepted requests (no matter whether they are in the original requests), and divide it by the number of requests to get the acceptance rate.
+It is possible that a sender sends multiple requests to the same receiver, and a request could be accepted more than once. In this case, the ‘duplicated’ requests or acceptances are only counted once.
+If there are no requests at all, you should return 0.00 as the accept_rate.
+
+
+# Solution 3
+SELECT 
+case when (select count(*) from FriendRequest )=0 THEN 0.00
+else
+CONVERT(DECIMAL(7,2),( 
+(CONVERT(DECIMAL(7,2),(SELECT Count(DISTINCT Cast(requester_id AS VARCHAR)+ ' ' +Cast(accepter_id AS VARCHAR)) FROM   requestaccepted)))
+/  
+(CONVERT(DECIMAL(7,2),(SELECT Count(DISTINCT Cast(sender_id AS VARCHAR) + ' ' +Cast(send_to_id AS VARCHAR)) FROM   friendrequest)))
+)) end as accept_rate
+		
