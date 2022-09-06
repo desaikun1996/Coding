@@ -1,2 +1,2 @@
 # Leetcode Coding Practice
- Repository to save all my daily coding practice questions and their solutions
+ Repository to save all my daily Leetcode coding practice questions with their solutions
