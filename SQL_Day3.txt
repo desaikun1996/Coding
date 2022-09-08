@@ -44,3 +44,8 @@ select sell_date,count(distinct product) num_sold,group_concat(distinct product)
 
 --------------------------------------------------------------------------------------------------------------------------------
 
+
+
+select patient_id, patient_name, conditions
+from patients
+where conditions like 'DIAB1%' or conditions like '% DIAB1%'
