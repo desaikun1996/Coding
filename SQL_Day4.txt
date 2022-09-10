@@ -96,14 +96,16 @@ Return the result table ordered by id in ascending order.
 
 
 #Solution 3:
-select id, 
-case
-    when p_id is null then 'Root'
-    when id in(select distinct p_id from Tree) then 'Inner'
-    else 'Leaf'
-end as type
-from Tree
-
+select id, 'Root' from kd
+where pid is null
+UNION
+select id, 'Leaf' from kd
+where id not in (select distinct pid from kd where pid is not null)
+UNION
+select id, 'Inner' from kd
+where id in (select distinct pid from kd where pid is not null)
+and pid is not null
+order by 1
 
 ----------------------------------------------------------------------------------------------------------------------------------------------
 
